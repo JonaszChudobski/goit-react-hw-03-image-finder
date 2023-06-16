@@ -1,10 +1,10 @@
 import React from 'react';
-import css from "./ImgaeGalleryItem.module.css";
+import css from './ImgaeGalleryItem.module.css';
 
-export const ImageGalleryItem = () => {
+export const ImageGalleryItem = ({ id, src, alt }) => {
   return (
-    <li className={css.ImageGalleryItem}>
-      <img className={css.ImageGalleryItem-image} src="" alt="" />
+    <li key={id} className={css.ImageGalleryItem}>
+      <img className={css.ImageGalleryItemImage} src={src} alt={alt} />
     </li>
   );
 };
