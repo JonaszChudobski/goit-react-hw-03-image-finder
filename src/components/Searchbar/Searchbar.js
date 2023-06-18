@@ -1,16 +1,18 @@
 import React from 'react';
 import css from './Searchbar.module.css';
+import PropTypes from 'prop-types';
 
-export const Searchbar = () => {
+export const Searchbar = ({ onSubmit }) => {
   return (
-      <header className={css.Searchbar}>
-          <form className={css.SearchForm}>
-              <button type="submit" className={css.SearchForm_button}>
-                  <span className={css.SearchForm_button_label}>Search</span>
+    <header className={css.Searchbar}>
+      <form className={css.SearchForm} onSubmit={onSubmit}>
+        <button type="submit" className={css.SearchFormButton}>
+          <span className={css.SearchFormButtonLabel}>Search</span>
         </button>
 
         <input
-          className={css.SearchForm_input}
+          name="word input"
+          className={css.SearchFormInput}
           type="text"
           autoComplete="off"
           autoFocus
@@ -19,4 +21,8 @@ export const Searchbar = () => {
       </form>
     </header>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
 };

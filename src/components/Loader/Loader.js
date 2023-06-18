@@ -10,7 +10,6 @@ export const Loader = () => {
       color="green"
       ariaLabel="three-dots-loading"
       wrapperStyle
-      wrapperClass
     />
   );
 };
