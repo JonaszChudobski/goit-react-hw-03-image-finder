@@ -3,7 +3,7 @@ import css from './ImageGallery.module.css';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
 
-export const ImageGallery = ({ images }) => {
+export const ImageGallery = ({ images, onClick }) => {
   return (
     <ul className={css.ImageGallery}>
       {images.map(({ id, webformatURL, largeImageURL, tags }) => (
@@ -12,6 +12,7 @@ export const ImageGallery = ({ images }) => {
           src={webformatURL}
           alt={tags}
           srcLarge={largeImageURL}
+          onClick={onClick}
         />
       ))}
     </ul>

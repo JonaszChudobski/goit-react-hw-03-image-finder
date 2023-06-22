@@ -1,12 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './App.module.css';
+import { Modal } from 'components/Modal/Modal';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
-import axios from 'axios';
 import { Button } from './Button/Button';
+import { handleFetch } from 'api/fetchFunction';
 
-axios.defaults.baseURL = 'https://pixabay.com/api';
+const INITIAL_STATE = {
+  srclarge: '',
+  alt: '',
+};
 
 export class App extends Component {
   state = {
@@ -16,6 +20,12 @@ export class App extends Component {
     page: 1,
     isButton: null,
     error: null,
+    srclarge: '',
+    alt: '',
+  };
+
+  handlePagesAmount = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   handleSubmit = e => {
@@ -33,9 +43,7 @@ export class App extends Component {
     this.setState({ isLoading: true });
     const { query, page } = this.state;
     try {
-      const response = await axios.get(
-        `/?q=${query}&page=${page}&key=37378265-e99df069f710b566c70c02ed7&image_type=photo&orientation=horizontal&per_page=12`
-      );
+      const response = await handleFetch(query, page);
       if (page === 1) {
         this.setState({
           images: response.data.hits,
@@ -53,29 +61,54 @@ export class App extends Component {
     }
   };
 
-  handlePagesAmount = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  onClick = e => {
+    const src = e.currentTarget.dataset.srclarge;
+    const alt = e.currentTarget.getAttribute('alt');
+    this.setState({
+      srclarge: src,
+      alt: alt,
+    });
+  };
+
+  onExitClick = () => {
+    this.setState({ ...INITIAL_STATE });
+  };
+
+  onExitEscape = e => {
+    if (e.keyCode === 27) this.setState({ ...INITIAL_STATE });
   };
 
   render() {
-    const { images, page, isLoading, isButton } = this.state;
+    const { images, page, isLoading, isButton, srclarge, alt } = this.state;
     return (
-      <Fragment>
+      <>
         <Searchbar onSubmit={this.handleSubmit} />
-        {isLoading ? <Loader /> : <ImageGallery images={images} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <ImageGallery images={images} onClick={this.onClick} />
+        )}
         {!isLoading && isButton > 12 && page < Math.ceil(isButton / 12) ? (
           <Button onClick={this.handlePagesAmount} />
         ) : null}
-      </Fragment>
+        {srclarge ? (
+          <Modal
+            src={srclarge}
+            alt={alt}
+            onExitClick={this.onExitClick}
+            onExitEscape={this.onExitEscape}
+          />
+        ) : null}
+      </>
     );
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevState.page !== this.state.page ||
       prevState.query !== this.state.query
     ) {
-      await this.handleGet();
+      this.handleGet();
     }
   }
 }

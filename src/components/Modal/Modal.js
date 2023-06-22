@@ -1,19 +1,35 @@
+import { Component } from 'react';
 import React from 'react';
 import css from './Modal.module.css';
 import PropTypes from 'prop-types';
 
-export const Modal = ({ src, alt, onClick }) => {
-  return (
-    <div className={css.Overlay} onClick={onClick}>
-      <div className={css.Modal}>
-        <img src={src} alt={alt} />
-      </div>
-    </div>
-  );
-};
+export class Modal extends Component {
+  state = {
+    src: this.props.src,
+    alt: this.props.alt,
+  };
 
+  render() {
+    return (
+      <div className={css.Overlay} onClick={this.props.onExitClick}>
+        <div className={css.Modal}>
+          <img src={this.state.src} alt={this.state.alt} />
+        </div>
+      </div>
+    );
+  }
+
+  componentDidMount() {
+    document.addEventListener('keyup', this.props.onExitEscape);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.props.onExitEscape);
+  }
+}
 Modal.propTypes = {
   src: PropTypes.string,
   alt: PropTypes.string,
-  onClick: PropTypes.func,
+  onExitClick: PropTypes.func,
+  onExitEscape: PropTypes.func,
 };
