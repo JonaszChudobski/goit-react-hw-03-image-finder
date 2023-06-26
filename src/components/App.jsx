@@ -41,12 +41,12 @@ export const App = () => {
     setAlt('');
   };
 
-  const onExitEscape = e => {
-    if (e.keyCode === 27) {
-      setSrclarge('');
-      setAlt('');
-    }
-  };
+   const onExitEscape = e => {
+     if (e.keyCode === 27) {
+       setSrclarge('');
+       setAlt('');
+     }
+   };
 
   useEffect(() => {
     const handleGet = async (query, page) => {

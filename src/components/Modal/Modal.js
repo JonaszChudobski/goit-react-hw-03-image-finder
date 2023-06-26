@@ -1,32 +1,25 @@
-import { Component } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import css from './Modal.module.css';
 import PropTypes from 'prop-types';
 
-export class Modal extends Component {
-  state = {
-    src: this.props.src,
-    alt: this.props.alt,
-  };
+export const Modal = ({ src, alt, onExitClick, onExitEscape }) => {
+  useEffect(() => {
+    document.addEventListener('keyup', onExitEscape);
+    return () => {
+      document.removeEventListener('keyup', onExitEscape);
+    };
+    // eslint-disable-next-line
+  }, []);
 
-  render() {
-    return (
-      <div className={css.Overlay} onClick={this.props.onExitClick}>
-        <div className={css.Modal}>
-          <img src={this.state.src} alt={this.state.alt} />
-        </div>
+  return (
+    <div className={css.Overlay} onClick={onExitClick}>
+      <div className={css.Modal}>
+        <img src={src} alt={alt} />
       </div>
-    );
-  }
+    </div>
+  );
+};
 
-  componentDidMount() {
-    document.addEventListener('keyup', this.props.onExitEscape);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keyup', this.props.onExitEscape);
-  }
-}
 Modal.propTypes = {
   src: PropTypes.string,
   alt: PropTypes.string,
