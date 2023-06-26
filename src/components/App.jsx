@@ -13,7 +13,6 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [isButton, setIsButton] = useState(null);
-  const [error, setError] = useState(null);
   const [srclarge, setSrclarge] = useState('');
   const [alt, setAlt] = useState('');
 
@@ -28,27 +27,6 @@ export const App = () => {
     setQuery(input);
     setPage(1);
     setIsButton(null);
-  };
-
-  const handleGet = async () => {
-    if (query === '') {
-      return null;
-    } else {
-      setIsLoading(true);
-      try {
-        const response = await handleFetch(query, page);
-        if (page === 1) {
-          setImages(response.data.hits);
-          setIsButton(response.data.totalHits);
-        } else {
-          setImages([...images, ...response.data.hits]);
-        }
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
   };
 
   const onClick = e => {
@@ -71,7 +49,28 @@ export const App = () => {
   };
 
   useEffect(() => {
-    handleGet();
+    const handleGet = async (query, page) => {
+      if (query === '') {
+        return null;
+      } else {
+        setIsLoading(true);
+        try {
+          const response = await handleFetch(query, page);
+          if (page === 1) {
+            setImages(response.data.hits);
+            setIsButton(response.data.totalHits);
+          } else {
+            setImages([...images, ...response.data.hits]);
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    handleGet(query, page);
+    // eslint-disable-next-line
   }, [query, page]);
 
   return (
