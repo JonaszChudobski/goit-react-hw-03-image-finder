@@ -81,17 +81,17 @@ export const App = () => {
       ) : (
         <ImageGallery images={images} onClick={onClick} />
       )}
-      {!isLoading && isButton > 12 && page < Math.ceil(isButton / 12) ? (
+      {!isLoading && isButton > 12 && page < Math.ceil(isButton / 12) && (
         <Button onClick={handlePagesAmount} />
-      ) : null}
-      {srclarge ? (
+      )}
+      {srclarge && (
         <Modal
           src={srclarge}
           alt={alt}
           onExitClick={onExitClick}
           onExitEscape={onExitEscape}
         />
-      ) : null}
+      )}
     </>
   );
 };
